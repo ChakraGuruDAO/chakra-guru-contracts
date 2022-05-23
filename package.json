@@ -27,10 +27,11 @@
     "console:local": "cross-env NETWORK=localhost yarn console:custom",
     "console:custom": "npx hardhat console --network $NETWORK",
     "mnemonics": "npx mnemonics",
+    "pk": "npx hardhat generateWallet",
     "docgen": "npx hardhat docgen"
   },
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "@nomiclabs/hardhat-web3": "^2.0.0",
@@ -65,6 +66,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/hardhat-upgrades": "^1.17.0",
     "@openzeppelin/test-helpers": "^0.5.15",
     "cross-env": "^7.0.3",
     "dotenv-expand": "^8.0.3",

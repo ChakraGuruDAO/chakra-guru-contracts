@@ -1,4 +1,5 @@
-import { boolParser, getConfigKey } from "../helpers/config";
+import { getConfigKey } from "./getConfigKey";
+import { boolParser } from "./parsers";
 
 const configKey = getConfigKey<Environment>();
 
@@ -17,6 +18,11 @@ export interface Environment {
 
   KARMA_TOKEN_SUPPLY: string;
   KARMA_TOKEN_ADDRESS: string;
+
+  DEPLOYER_PK: string;
+  KEEPER_PK: string;
+  UPGRADER_PK: string;
+  REWARDER_PK: string;
 }
 
 export const ENVIRONMENT = {
@@ -43,6 +49,11 @@ export const ENVIRONMENT = {
   REPORT: {
     REPORT_GAS: configKey("REPORT_GAS", boolParser),
   },
+
+  DEPLOYER_PK: configKey("DEPLOYER_PK"),
+  KEEPER_PK: configKey("KEEPER_PK"),
+  UPGRADER_PK: configKey("UPGRADER_PK"),
+  REWARDER_PK: configKey("REWARDER_PK"),
 
   KARMA_TOKEN: {
     SUPPLY: configKey("KARMA_TOKEN_SUPPLY"),

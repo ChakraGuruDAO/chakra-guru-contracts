@@ -1,45 +1,34 @@
-import { ENVIRONMENT } from "./config/env";
-
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-web3";
+import "@nomiclabs/hardhat-ethers";
+import "@openzeppelin/hardhat-upgrades";
+
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "solidity-docgen";
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
+import "./tasks";
 
-  for (const account of accounts) {
-    console.log(account.address);
-  }
-});
+import { buildHardhatNetworkAccount, getPKs } from "./utils/configInit";
+import { ENVIRONMENT } from "./utils/env";
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
+const accounts = getPKs();
+const hardhatNetworkAccounts = buildHardhatNetworkAccount(accounts);
 
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
+  paths: {
+    sources: "./contracts/original",
+  },
   networks: {
-    ropsten: {
-      url: ENVIRONMENT.NETWORKS.ROPSTEN.URL,
-      accounts: { mnemonic: ENVIRONMENT.MNEMONIC },
-    },
-    rinkeby: {
-      url: ENVIRONMENT.NETWORKS.RINKEBY.URL,
-      accounts: { mnemonic: ENVIRONMENT.MNEMONIC },
-    },
-    fuji: {
-      url: ENVIRONMENT.NETWORKS.AVALANCHE_FUJI.URL,
-      accounts: { mnemonic: ENVIRONMENT.MNEMONIC },
-    },
+    hardhat: { accounts: hardhatNetworkAccounts },
     bsc: {
-      url: ENVIRONMENT.NETWORKS.BSC.URL,
-      accounts: { mnemonic: ENVIRONMENT.MNEMONIC },
+      url: ENVIRONMENT.NETWORKS.BSC.URL || "https://bsc-dataseed2.defibit.io/",
+      chainId: 56,
+      accounts,
     },
   },
   docgen: {},
