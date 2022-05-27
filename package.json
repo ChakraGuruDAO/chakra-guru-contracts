@@ -9,6 +9,7 @@
   },
   "scripts": {
     "compile": "cross-env NODE_ENV=mainnet npx hardhat compile",
+    "watch": "npx hardhat watch compilation",
     "test": "cross-env NODE_ENV=testnet npx hardhat test",
     "clean": "npx hardhat clean",
     "verify": "npx hardhat run scripts/verify.ts",
@@ -70,6 +71,7 @@
     "@openzeppelin/test-helpers": "^0.5.15",
     "cross-env": "^7.0.3",
     "dotenv-expand": "^8.0.3",
+    "hardhat-watcher": "^2.3.0",
     "solidity-docgen": "^0.6.0-beta.10"
   }
 }

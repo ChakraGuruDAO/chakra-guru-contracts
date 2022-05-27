@@ -7,6 +7,7 @@ import "@openzeppelin/hardhat-upgrades";
 
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
+import "hardhat-watcher";
 import "solidity-coverage";
 import "solidity-docgen";
 
@@ -21,7 +22,7 @@ const hardhatNetworkAccounts = buildHardhatNetworkAccount(accounts);
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   paths: {
-    sources: "./contracts/original",
+    sources: "./contracts",
   },
   networks: {
     hardhat: { accounts: hardhatNetworkAccounts },
@@ -38,6 +39,11 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: ENVIRONMENT.ETHERSCAN.API_KEY,
+  },
+  watcher: {
+    compilation: {
+      tasks: ["compile"],
+    },
   },
 };
 
