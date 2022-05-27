@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./UserVestingVault.sol";
+import "../utils/vesting/UserVestingVault.sol";
 
 contract KarmaPrivateSaleVestingVault is UserVestingVault {
     constructor(address karmaToken) {

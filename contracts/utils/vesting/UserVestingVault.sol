@@ -15,18 +15,21 @@ abstract contract UserVestingVault is VestingVault {
     using SafeERC20 for IERC20;
     using Address for address;
 
-    // function _getTotalSumInVault() internal virtual override returns (uint256) {
-    //     bool[] memory _empty = new bool[](vestingPortionsUnlockTime.length);
+    address[] private addresses = [address(0)];
+    mapping(address => uint256) private addressToIndex;
 
-    //     for (uint256 i = 0; i < allUsers.length; i++) {
-    //         if (allUsers[i] != address(0)) {
-    //             vestingUsersMap[allUsers[i]].isPortionWithdraw = _empty;
-    //         }
-    //     }
+    function _getTotalSumInVault() internal virtual override returns (uint256) {
+        bool[] memory _empty = new bool[](vestingPortionsUnlockTime.length);
 
-    //     uint256 sumBalance = getBalance();
-    //     return sumBalance;
-    // }
+        for (uint256 i = 0; i < addresses.length; i++) {
+            if (addresses[i] != address(0)) {
+                vestingUsersMap[addresses[i]].isPortionWithdraw = _empty;
+            }
+        }
+
+        uint256 sumBalance = getBalance();
+        return sumBalance;
+    }
 
     function addUser(address user, uint256 amount) public virtual override onlyVaultDisabled onlyOwner {
         if (_addUser(user) > 0) {
@@ -60,9 +63,6 @@ abstract contract UserVestingVault is VestingVault {
     function getBalance(address user) public view virtual override returns (uint256) {
         return vestingUsersMap[user].balance;
     }
-
-    address[] private addresses = [address(0)];
-    mapping(address => uint256) private addressToIndex;
 
     // Добавляет новый объект
     // Возвращает индекс объекта
