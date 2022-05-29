@@ -94,7 +94,23 @@ abstract contract VestingVaultMeta {
         require(uint8(newStatus) > uint8(prevStatus), "wrong status stage");
 
         _status = newStatus;
+        if (_status == Status.BENEFICIARY) {
+            _changeStatusToBeneficiary();
+        } else if (_status == Status.CLAIM) {
+            _changeStatusToClaim();
+        }
         emit VaultStatusUpdated(newStatus, prevStatus);
+    }
+
+    function _changeStatusToBeneficiary() internal virtual {
+        require(address(_token) != address(0), "address is empty");
+        require(_vestingPercentPrecision >= 1, "precision is not set");
+        require(_vestingPortionsUnlockTime.length > 0 && _vestingPercentPerPortion.length > 0, "vesting info is not set");
+        require(_zeroDate > block.timestamp, "zero date is not set");
+    }
+
+    function _changeStatusToClaim() internal virtual {
+        // solhint-disable-previous-line no-empty-blocks
     }
 
     modifier onlyIsStatus(Status status) virtual {

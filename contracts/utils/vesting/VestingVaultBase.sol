@@ -33,6 +33,16 @@ abstract contract VestingVaultBase is VestingVaultMeta, Context {
         return _beneficiaries.values();
     }
 
+    function getAllBalance() public view virtual returns (uint256) {
+        uint256 sum = 0;
+        address[] memory beneficiaries = _beneficiaries.values();
+        for (uint256 i = 0; i < beneficiaries.length; i++) {
+            BeneficiaryInfo memory beneficiaryInfo = _beneficiaryInfoMap[beneficiaries[i]];
+            sum = sum.add(beneficiaryInfo.amount);
+        }
+        return sum;
+    }
+
     function _addBeneficiary(address beneficiary, uint256 amount) internal virtual onlyIsStatus(Status.BENEFICIARY) {
         _beneficiaries.add(beneficiary);
 
@@ -49,7 +59,7 @@ abstract contract VestingVaultBase is VestingVaultMeta, Context {
         emit VaultBeneficiaryUpdated(beneficiary, 0);
     }
 
-    function _withdrawMultiPortions(uint256[] calldata portionIds) internal virtual onlyIsStatus(Status.CLAIM) {
+    function _claimMultiPortions(uint256[] calldata portionIds) internal virtual onlyIsStatus(Status.CLAIM) {
         (uint256[] memory vestingPortionsUnlockTime, uint256[] memory vestingPercentPerPortion, uint256 vestingPercentPrecision) = getVestingInfo();
         uint256 zeroDate = getZeroDate();
         IERC20 token = getToken();
@@ -75,5 +85,13 @@ abstract contract VestingVaultBase is VestingVaultMeta, Context {
             token.safeTransfer(userAddress, totalToWithdraw);
             emit VaultWithdraw(userAddress, totalToWithdraw);
         }
+    }
+
+    function _changeStatusToClaim() internal virtual override {
+        super._changeStatusToClaim();
+
+        IERC20 token = getToken();
+        uint256 allBalance = getAllBalance();
+        require(token.balanceOf(address(this)) >= allBalance, "balance is not equals");
     }
 }
