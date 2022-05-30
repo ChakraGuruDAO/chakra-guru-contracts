@@ -8,8 +8,8 @@ import "../CrowdsaleBase.sol";
 abstract contract CrowdsaleTime is CrowdsaleBase {
     using SafeMath for uint256;
 
-    uint256 internal _openingTime;
-    uint256 internal _closingTime;
+    uint256 private _openingTime;
+    uint256 private _closingTime;
 
     function getOpeningTime() public view returns (uint256) {
         return _openingTime;
@@ -19,11 +19,21 @@ abstract contract CrowdsaleTime is CrowdsaleBase {
         return _closingTime;
     }
 
+    function _setOpeningTime(uint256 openingTime) internal virtual {
+        require(openingTime > block.timestamp, "opening time is wrong");
+        _openingTime = openingTime;
+    }
+
+    function _setClosingTime(uint256 closingTime) internal virtual {
+        require(closingTime > block.timestamp && closingTime > _openingTime, "closing time is wrong");
+        _closingTime = closingTime;
+    }
+
     function _isOpenByTime() internal view virtual returns (bool) {
         return block.timestamp >= _openingTime && block.timestamp <= _closingTime;
     }
 
-    function _hasClosedByTime() internal view virtual returns (bool) {
+    function _isFinishedByTime() internal view virtual returns (bool) {
         return block.timestamp > _closingTime;
     }
 

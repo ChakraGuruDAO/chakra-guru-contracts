@@ -15,24 +15,37 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
     constructor(
         address saleToken,
         address raiseToken,
-        uint256 rate,
         address raiseWallet
     ) {
         // Meta
-        _saleToken = IERC20(saleToken);
-        _raiseToken = IERC20(raiseToken);
-        _rate = rate;
+        _setSaleToken(saleToken);
+        _setRaiseToken(raiseToken);
 
         // Base
-        _raiseWallet = raiseWallet;
+        _setRaiseWallet(raiseWallet);
+    }
 
-        // Capped
-        _minSaleCap = 2000000;
-        _maxSaleCap = 4000000;
+    function setRate(uint256 rate) public onlyOwner {
+        _setRate(rate);
+    }
 
-        // Time
-        _openingTime = 1654074000;
-        _closingTime = 1656579600;
+    function setSaleCap(uint256 minSaleCap, uint256 maxSaleCap) public onlyOwner {
+        _setMinSaleCap(minSaleCap);
+        _setMaxSaleCap(maxSaleCap);
+    }
+
+    function setSaleLimit(uint256 minSaleLimit, uint256 maxSaleLimit) public onlyOwner {
+        _setMinSaleLimit(minSaleLimit);
+        _setMaxSaleLimit(maxSaleLimit);
+    }
+
+    function setTime(uint256 openingTime, uint256 closingTime) public onlyOwner {
+        _setOpeningTime(openingTime);
+        _setClosingTime(closingTime);
+    }
+
+    function setVestingVault(address vestingVault) public onlyOwner {
+        _setVestingVault(vestingVault);
     }
 
     function isOpen() public view returns (bool) {
@@ -42,7 +55,7 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
 
     function isFinished() public view returns (bool) {
         (, bool maxSaleCapReached) = capReached();
-        return _hasClosedByTime() || maxSaleCapReached;
+        return _isFinishedByTime() || maxSaleCapReached;
     }
 
     function _preValidatePurchase(

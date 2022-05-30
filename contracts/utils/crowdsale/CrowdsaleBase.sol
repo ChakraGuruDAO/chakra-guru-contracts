@@ -16,10 +16,11 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
     using SafeERC20 for IERC20;
     using Address for address;
 
-    address internal _raiseWallet;
-    uint256 internal _raisedBalance;
+    address private _raiseWallet;
+    uint256 private _raisedBalance;
 
-    event TokensPurchased(address indexed purchaser, address indexed beneficiary, uint256 saleAmount, uint256 raiseAmount);
+    event CrowdsaleRaiseWalletUpdated(address raiseWallet);
+    event CrowdsaleTokensPurchased(address indexed purchaser, address indexed beneficiary, uint256 saleAmount, uint256 raiseAmount);
 
     // Возвращает проданный/привлеченный баланс
     function getRaiseTokenBalance() public view virtual returns (uint256) {
@@ -30,9 +31,16 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
         return _raisedBalance.mul(getRate());
     }
 
+    function _setRaiseWallet(address raiseWallet) internal virtual {
+        require(raiseWallet != address(0), "raiseWallet is empty");
+
+        _raiseWallet = raiseWallet;
+        emit CrowdsaleRaiseWalletUpdated(raiseWallet);
+    }
+
     function buyTokens(address beneficiary, uint256 raiseAmount) public nonReentrant {
         // calculate token amount to be created
-        uint256 saleAmount = getCalculateSaleToken(raiseAmount);
+        uint256 saleAmount = getSaleAmountFromRaiseAmount(raiseAmount);
 
         _preValidatePurchase(beneficiary, saleAmount, raiseAmount);
 
@@ -40,7 +48,7 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
         _raisedBalance = _raisedBalance.add(raiseAmount);
 
         _processPurchase(beneficiary, saleAmount);
-        emit TokensPurchased(_msgSender(), beneficiary, saleAmount, raiseAmount);
+        emit CrowdsaleTokensPurchased(_msgSender(), beneficiary, saleAmount, raiseAmount);
 
         _updatePurchasingState(beneficiary, saleAmount, raiseAmount);
 
@@ -62,7 +70,7 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
 
     // Определяет как отправить токены пользователю
     function _processPurchase(address beneficiary, uint256 saleAmount) internal virtual {
-        _saleToken.safeTransfer(beneficiary, saleAmount);
+        getSaleToken().safeTransfer(beneficiary, saleAmount);
     }
 
     // Обновляет внешнее состояние, если необходимо
@@ -76,7 +84,7 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
 
     // Описывает способ отправки средств от пользователя в хранилище
     function _forwardFunds(uint256 raiseAmount) internal virtual {
-        _raiseToken.safeTransferFrom(_msgSender(), _raiseWallet, raiseAmount);
+        getRaiseToken().safeTransferFrom(_msgSender(), _raiseWallet, raiseAmount);
     }
 
     // Пост-проверки. Можно проверить состояния и отменить сделку, если условия не подходят
