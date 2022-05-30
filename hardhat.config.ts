@@ -1,10 +1,12 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "tsconfig-paths/register";
 
+import "@typechain/hardhat";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
-import "@typechain/hardhat";
+import "@nomiclabs/hardhat-solhint";
+
 import "hardhat-gas-reporter";
 import "hardhat-watcher";
 import "solidity-coverage";
@@ -22,11 +24,6 @@ const hardhatNetworkAccounts = buildHardhatNetworkAccount(accounts);
 
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
-  paths: {
-    sources: "./contracts",
-    cache: "./build/cache",
-    artifacts: "./build/artifacts",
-  },
   defaultNetwork: "hardhat",
   networks: {
     hardhat: { accounts: hardhatNetworkAccounts },
@@ -45,11 +42,17 @@ const config: HardhatUserConfig = {
   },
   docgen: {},
   gasReporter: {
-    enabled: ENVIRONMENT.REPORT.REPORT_GAS !== undefined,
+    enabled: process.env.REPORT_GAS ? true : false,
     currency: "USD",
   },
   etherscan: {
-    apiKey: ENVIRONMENT.ETHERSCAN.API_KEY,
+    apiKey: {
+      bsc: process.env.ETHERSCAN_KEY_BSC,
+      bscTestnet: process.env.ETHERSCAN_KEY_BSCTESTNET,
+    },
+  },
+  typechain: {
+    outDir: "endpoints",
   },
   watcher: {
     compilation: {
