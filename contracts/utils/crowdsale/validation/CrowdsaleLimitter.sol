@@ -20,6 +20,10 @@ abstract contract CrowdsaleLimitter is CrowdsaleBase {
         return (_minSaleLimit, _maxSaleLimit);
     }
 
+    function _getBalanceOf(address beneficiary) internal view returns (uint256) {
+        return _contributions[beneficiary];
+    }
+
     function _setMinSaleLimit(uint256 minSaleLimit) internal virtual {
         require(minSaleLimit > 0, "min sale limit is wrong");
         _minSaleLimit = minSaleLimit;
@@ -42,11 +46,12 @@ abstract contract CrowdsaleLimitter is CrowdsaleBase {
     }
 
     function _updatePurchasingState(
+        address purchaser,
         address beneficiary,
         uint256 saleAmount,
         uint256 raiseAmount
     ) internal virtual override {
-        super._updatePurchasingState(beneficiary, saleAmount, raiseAmount);
+        super._updatePurchasingState(purchaser, beneficiary, saleAmount, raiseAmount);
         _contributions[beneficiary] = _contributions[beneficiary].add(saleAmount);
     }
 }

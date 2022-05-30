@@ -31,6 +31,10 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
         return _raisedBalance.mul(getRate());
     }
 
+    function _getRaiseWallet() internal view virtual returns (address) {
+        return _raiseWallet;
+    }
+
     function _setRaiseWallet(address raiseWallet) internal virtual {
         require(raiseWallet != address(0), "raiseWallet is empty");
 
@@ -41,6 +45,7 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
     function buyTokens(address beneficiary, uint256 raiseAmount) public nonReentrant {
         // calculate token amount to be created
         uint256 saleAmount = getSaleAmountFromRaiseAmount(raiseAmount);
+        address purchaser = _msgSender();
 
         _preValidatePurchase(beneficiary, saleAmount, raiseAmount);
 
@@ -48,11 +53,11 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
         _raisedBalance = _raisedBalance.add(raiseAmount);
 
         _processPurchase(beneficiary, saleAmount);
-        emit CrowdsaleTokensPurchased(_msgSender(), beneficiary, saleAmount, raiseAmount);
+        emit CrowdsaleTokensPurchased(purchaser, beneficiary, saleAmount, raiseAmount);
 
-        _updatePurchasingState(beneficiary, saleAmount, raiseAmount);
+        _updatePurchasingState(purchaser, beneficiary, saleAmount, raiseAmount);
 
-        _forwardFunds(raiseAmount);
+        _forwardFunds(purchaser, raiseAmount);
         _postValidatePurchase(beneficiary, saleAmount, raiseAmount);
     }
 
@@ -75,6 +80,7 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
 
     // Обновляет внешнее состояние, если необходимо
     function _updatePurchasingState(
+        address purchase,
         address beneficiary,
         uint256 saleAmount,
         uint256 raiseAmount
@@ -83,8 +89,8 @@ abstract contract CrowdsaleBase is CrowdsaleMeta, Context, ReentrancyGuard {
     }
 
     // Описывает способ отправки средств от пользователя в хранилище
-    function _forwardFunds(uint256 raiseAmount) internal virtual {
-        getRaiseToken().safeTransferFrom(_msgSender(), _raiseWallet, raiseAmount);
+    function _forwardFunds(address purchaser, uint256 raiseAmount) internal virtual {
+        getRaiseToken().safeTransferFrom(purchaser, _raiseWallet, raiseAmount);
     }
 
     // Пост-проверки. Можно проверить состояния и отменить сделку, если условия не подходят

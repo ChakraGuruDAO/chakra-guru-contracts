@@ -10,8 +10,9 @@ import "../utils/crowdsale/validation/CrowdsaleTime.sol";
 import "../utils/crowdsale/validation/CrowdsaleLimitter.sol";
 import "../utils/crowdsale/validation/CrowdsaleCapped.sol";
 import "../utils/crowdsale/distribution/CrowdsalePostDelivery.sol";
+import "../utils/crowdsale/distribution/CrowdsaleRefundable.sol";
 
-contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, CrowdsaleCapped, CrowdsaleLimitter, CrowdsalePostDelivery {
+contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, CrowdsaleCapped, CrowdsaleLimitter, CrowdsalePostDelivery, CrowdsaleRefundable {
     constructor(
         address saleToken,
         address raiseToken,
@@ -58,6 +59,14 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
         return _isFinishedByTime() || maxSaleCapReached;
     }
 
+    function canRefundable() public view returns (bool) {
+        return _canRefundable();
+    }
+
+    function balanceOf(address beneficiary) public view returns (uint256) {
+        return _getBeneficiaryAmount(beneficiary);
+    }
+
     function _preValidatePurchase(
         address beneficiary,
         uint256 saleAmount,
@@ -71,10 +80,20 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
     }
 
     function _updatePurchasingState(
+        address purchaser,
         address beneficiary,
         uint256 saleAmount,
         uint256 raiseAmount
-    ) internal override(CrowdsaleBase, CrowdsaleLimitter) {
-        super._updatePurchasingState(beneficiary, saleAmount, raiseAmount);
+    ) internal override(CrowdsaleRefundable, CrowdsaleLimitter, CrowdsaleBase) {
+        super._updatePurchasingState(purchaser, beneficiary, saleAmount, raiseAmount);
+    }
+
+    function _hasFinished() internal view override returns (bool) {
+        return isFinished();
+    }
+
+    function _goalReached() internal view override returns (bool) {
+        (bool minSaleCapReached, ) = capReached();
+        return minSaleCapReached;
     }
 }

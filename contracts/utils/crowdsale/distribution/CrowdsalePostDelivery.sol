@@ -38,4 +38,9 @@ abstract contract CrowdsalePostDelivery is CrowdsaleBase {
     function _processPurchase(address beneficiary, uint256 saleAmount) internal virtual override {
         _vestingVault.addBeneficiary(beneficiary, saleAmount);
     }
+
+    function _getBeneficiaryAmount(address beneficiary) internal view virtual returns (uint256) {
+        (uint256 amount, ) = _vestingVault.getBeneficiary(beneficiary);
+        return amount;
+    }
 }
