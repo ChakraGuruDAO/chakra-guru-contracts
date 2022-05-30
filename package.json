@@ -8,10 +8,13 @@
     "email": "berish.ceo@gmail.com"
   },
   "scripts": {
-    "compile": "cross-env NODE_ENV=mainnet npx hardhat compile",
+    "clean": "npx hardhat clean && rm -rf build",
+    "compile": "npx hardhat compile",
     "watch": "npx hardhat watch compilation",
-    "test": "cross-env NODE_ENV=testnet npx hardhat test",
-    "clean": "npx hardhat clean",
+    "test": "npx hardhat test",
+    "node:start": "npx hardhat node",
+    "console": "npx hardhat console",
+    "deployKarma": "npx hardhat run scripts/deployKarma.ts",
     "verify": "npx hardhat run scripts/verify.ts",
     "lint": "prettier ./test/**/*.ts --check",
     "start:node": "cross-env NODE_ENV=production npx hardhat node",
