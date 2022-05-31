@@ -4,7 +4,7 @@ import { ethers, waffle } from "hardhat";
 import { emptyAddress, resetNetwork } from "~/test/_base";
 import * as Contracts from "~/typechain";
 
-describe("KarmaToken", function () {
+describe("CrowdsaleMeta", function () {
   let CrowdsaleMeta: Contracts.CrowdsaleMetaMock__factory;
   let crowdsaleMeta: Contracts.CrowdsaleMetaMock;
   let [deployer, alice, bob]: SignerWithAddress[] = [];

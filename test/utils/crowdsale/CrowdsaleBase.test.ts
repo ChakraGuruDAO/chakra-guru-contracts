@@ -1,21 +1,23 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers, waffle } from "hardhat";
+import { emptyAddress, resetNetwork } from "~/test/_base";
 import * as Contracts from "~/typechain";
 
-describe("KarmaToken", function () {
-  let KarmaToken: Contracts.KarmaToken__factory;
-  let karmaToken: Contracts.KarmaToken;
-  let deployer: SignerWithAddress;
+describe("CrowdsaleBase", function () {
+  let CrowdsaleMeta: Contracts.CrowdsaleMetaMock__factory;
+  let crowdsaleMeta: Contracts.CrowdsaleMetaMock;
+  let [deployer, alice, bob]: SignerWithAddress[] = [];
 
   before(async () => {
-    [deployer] = await ethers.getSigners();
-    KarmaToken = await ethers.getContractFactory("KarmaToken");
-  });
-  beforeEach(async () => {
-    karmaToken = await KarmaToken.deploy();
-    await karmaToken.deployed();
+    [deployer, alice, bob] = await ethers.getSigners();
+    CrowdsaleMeta = await ethers.getContractFactory("CrowdsaleMetaMock");
   });
 
-  it("test", async function () {});
+  beforeEach(async () => {
+    await resetNetwork(ethers);
+
+    crowdsaleMeta = await CrowdsaleMeta.connect(deployer).deploy();
+    await crowdsaleMeta.deployed();
+  });
 });

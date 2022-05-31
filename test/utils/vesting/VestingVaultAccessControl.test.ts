@@ -5,7 +5,7 @@ import { ethers, waffle } from "hardhat";
 import { Duration, resetNetwork, Time } from "~/test/_base";
 import * as Contracts from "~/typechain";
 
-describe("KarmaToken", function () {
+describe("VestingVaultAccessControl", function () {
   let VestingVaultAccessControl: Contracts.VestingVaultAccessControlMock__factory;
   let vestingVaultAccessControl: Contracts.VestingVaultAccessControlMock;
   let [deployer, alice, bob, karl]: SignerWithAddress[] = [];

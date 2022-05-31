@@ -4,7 +4,7 @@ import { ethers, waffle } from "hardhat";
 import { Duration, emptyAddress, resetNetwork, setNextBlockTimestamp, Time } from "~/test/_base";
 import * as Contracts from "~/typechain";
 
-describe("KarmaToken", function () {
+describe("VestingVaultBase", function () {
   let VestingVaultBase: Contracts.VestingVaultBaseMock__factory;
   let vestingVaultBase: Contracts.VestingVaultBaseMock;
   let [deployer, alice, bob]: SignerWithAddress[] = [];
