@@ -32,8 +32,13 @@ const config: HardhatUserConfig = {
       accounts,
     },
     bsc: {
-      url: "https://bsc-dataseed2.defibit.io/",
+      url: "https://bsc-dataseed3.binance.org",
       chainId: 56,
+      accounts,
+    },
+    bsc_testnet: {
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545",
+      chainId: 97,
       accounts,
     },
   },
