@@ -30,7 +30,6 @@ abstract contract CrowdsalePostDelivery is CrowdsaleBase {
 
         address prevVestingVault = address(_vestingVault);
         _vestingVault = VestingVaultAccessControl(vestingVault);
-        _vestingVault.grantRole(_vestingVault.BENEFICIARY_MANAGE_ROLE(), address(this));
 
         emit CrowdsaleVestingVaultUpdated(vestingVault, prevVestingVault);
     }

@@ -3,6 +3,8 @@ import { task } from "hardhat/config";
 task("deploy:chakra", "Deploy CHAKRA ERC20", async (taskArgs, hre) => {
   const { ethers } = hre;
 
+  await hre.run("compile");
+
   const [deployer] = await ethers.getSigners();
   console.log("Deployer:", deployer.address);
 

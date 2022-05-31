@@ -1,2 +1,5 @@
-export * from "./deployChakra";
-export * from "./deployKarma";
+import "./deployChakraToken";
+import "./deployKarmaToken";
+
+import "./deployKarmaPrivateVesting";
+import "./deployKarmaPrivateCrowdsale";

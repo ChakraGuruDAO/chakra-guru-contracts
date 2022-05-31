@@ -1,1 +1,5 @@
-export * from "./verifyKarmaToken";
+import "./verifyChakraToken";
+import "./verifyKarmaToken";
+
+import "./verifyKarmaPrivateVesting";
+import "./verifyKarmaPrivateCrowdsale";

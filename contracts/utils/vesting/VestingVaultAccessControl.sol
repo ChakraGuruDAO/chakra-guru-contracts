@@ -8,29 +8,9 @@ contract VestingVaultAccessControl is VestingVaultBase, AccessControlEnumerable 
     bytes32 public constant CONFIG_ROLE = keccak256("CONFIG_ROLE");
     bytes32 public constant BENEFICIARY_MANAGE_ROLE = keccak256("BENEFICIARY_MANAGE_ROLE");
 
-    constructor(address token) VestingVaultBase() {
+    constructor() VestingVaultBase() {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(CONFIG_ROLE, _msgSender());
-
-        // Meta information
-        _setToken(token);
-        _setZeroDate(block.timestamp);
-    }
-
-    function setZeroDate(uint256 zeroDate) external onlyRole(CONFIG_ROLE) {
-        _setZeroDate(zeroDate);
-    }
-
-    function setVestingInfo(
-        uint256[] memory vestingPortionsUnlockTime,
-        uint256[] memory vestingPercentPerPortion,
-        uint256 vestingPercentPrecision
-    ) external onlyRole(CONFIG_ROLE) {
-        _setVestingInfo(vestingPortionsUnlockTime, vestingPercentPerPortion, vestingPercentPrecision);
-    }
-
-    function changeStatus(Status newStatus) external onlyRole(CONFIG_ROLE) {
-        _changeStatus(newStatus);
     }
 
     function addBeneficiary(address beneficiary, uint256 amount) external onlyRole(BENEFICIARY_MANAGE_ROLE) {

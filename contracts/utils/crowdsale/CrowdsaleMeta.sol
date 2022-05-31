@@ -60,7 +60,7 @@ abstract contract CrowdsaleMeta {
     function _setRate(uint256 rate) internal virtual {
         require(rate > 0, "rate is wrong");
 
-        rate = _rate;
+        _rate = rate;
         emit CrowdsaleRateUpdated(rate);
     }
 }
