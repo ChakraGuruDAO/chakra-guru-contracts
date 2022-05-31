@@ -20,7 +20,6 @@
     "docgen": "npx hardhat docgen",
     "coverage": "npx hardhat coverage",
     "typechain": "npx hardhat typechain",
-    "deployKarma": "npx hardhat run scripts/deployKarma.ts",
     "generateWallet": "npx hardhat generateWallet"
   },
   "devDependencies": {
