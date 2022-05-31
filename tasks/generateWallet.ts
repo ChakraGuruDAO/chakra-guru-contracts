@@ -1,16 +1,15 @@
-import { Wallet } from "ethers";
+import { utils, Wallet } from "ethers";
 import { task, types } from "hardhat/config";
+import { generatePKs } from "~/utils/configInit";
 
 task("generateWallet", "Generate new Wallet with pk")
   .addOptionalParam("count", "Count of addresses to generate", 1, types.int)
   .setAction(async (taskArgs, hre) => {
-    const addresses = Array.apply(null, Array(taskArgs.count || 1)).map(() => {
-      const { address, privateKey } = Wallet.createRandom();
-      return { address, privateKey };
-    });
+    const pks = generatePKs(taskArgs.count || 1);
 
-    addresses.forEach(({ address, privateKey }, index) => {
+    pks.forEach((pk, index) => {
+      const address = new Wallet(pk).address;
       console.log(`ADDRESS [${index}]: ${address}`);
-      console.log(`PRIVATE KEY [${index}]: ${privateKey}\n`);
+      console.log(`PRIVATE KEY [${index}]: ${pk}\n`);
     });
   });

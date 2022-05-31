@@ -1,39 +1,34 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, Wallet } from "ethers";
 import { HardhatNetworkAccountUserConfig } from "hardhat/types/config";
-import { ENVIRONMENT } from "./env";
+import { ENVIRONMENT } from "./env.config";
 
-export const startingEtherPerAccount = ethers.utils.parseUnits(
-  BigNumber.from(1_000_000_000).toString(),
-  "ether"
-);
+export const startingEtherPerAccount = ethers.utils.parseUnits(BigNumber.from(1_000_000_000).toString(), "ether");
 
 export const getPKs = () => {
-  let deployerAccount, keeperAccount, upgraderAccount, rewarderAccount;
+  let deployerAccount: string;
+  let otherAccounts: string[];
 
   // PKs without `0x` prefix
   if (ENVIRONMENT.DEPLOYER_PK) deployerAccount = ENVIRONMENT.DEPLOYER_PK;
-  if (ENVIRONMENT.KEEPER_PK) keeperAccount = ENVIRONMENT.KEEPER_PK;
-  if (ENVIRONMENT.UPGRADER_PK) upgraderAccount = ENVIRONMENT.UPGRADER_PK;
-  if (ENVIRONMENT.REWARDER_PK) rewarderAccount = ENVIRONMENT.REWARDER_PK;
 
-  const accounts = [
-    deployerAccount,
-    keeperAccount,
-    upgraderAccount,
-    rewarderAccount,
-  ].filter((pk) => !!pk) as string[];
+  otherAccounts = generatePKs(ENVIRONMENT.OTHER_PK_COUNT);
+
+  const accounts = [deployerAccount, ...otherAccounts].filter((pk) => !!pk) as string[];
   return accounts;
 };
 
-export const buildHardhatNetworkAccount = (accounts: string[]) => {
-  const hardhatAccounts = accounts.map((pk) => {
-    // hardhat network wants 0x prefix in front of PK
-    const accountConfig: HardhatNetworkAccountUserConfig = {
-      privateKey: pk,
-      balance: startingEtherPerAccount.toString(),
-    };
-    return accountConfig;
+export const buildHardhatNetworkAccount = (accounts: string[]): HardhatNetworkAccountUserConfig[] => {
+  return accounts.map<HardhatNetworkAccountUserConfig>((pk) => ({
+    privateKey: pk,
+    balance: startingEtherPerAccount.toString(),
+  }));
+};
+
+export const generatePKs = (count: number = 1): string[] => {
+  const addresses = Array.apply(null, Array(count)).map(() => {
+    const { address, privateKey } = Wallet.createRandom();
+    return { address, privateKey };
   });
 
-  return hardhatAccounts;
+  return addresses.map((m) => m.privateKey);
 };

@@ -17,38 +17,35 @@ import "@openzeppelin/hardhat-upgrades";
 import "./tasks";
 
 import { buildHardhatNetworkAccount, getPKs } from "./utils/configInit";
-import { ENVIRONMENT } from "./utils/env";
+import { ENVIRONMENT } from "./utils/env.config";
 
 const accounts = getPKs();
-const hardhatNetworkAccounts = buildHardhatNetworkAccount(accounts);
 
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: { accounts: hardhatNetworkAccounts },
+    hardhat: { accounts: buildHardhatNetworkAccount(accounts) },
     ganache: {
       url: "http://127.0.0.1:7545/",
       chainId: 1337,
-      accounts: {
-        mnemonic: "dose fun table shed slab display unfair rural trip punch pudding fox",
-      },
+      accounts,
     },
     bsc: {
-      url: ENVIRONMENT.NETWORKS.BSC.URL || "https://bsc-dataseed2.defibit.io/",
+      url: "https://bsc-dataseed2.defibit.io/",
       chainId: 56,
       accounts,
     },
   },
   docgen: {},
   gasReporter: {
-    enabled: process.env.REPORT_GAS ? true : false,
+    enabled: ENVIRONMENT.REPORT_GAS,
     currency: "USD",
   },
   etherscan: {
     apiKey: {
-      bsc: process.env.ETHERSCAN_KEY_BSC,
-      bscTestnet: process.env.ETHERSCAN_KEY_BSCTESTNET,
+      bsc: ENVIRONMENT.ETHERSCAN.BSC,
+      bscTestnet: ENVIRONMENT.ETHERSCAN.BSC,
     },
   },
   typechain: {
