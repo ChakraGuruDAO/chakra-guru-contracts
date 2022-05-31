@@ -12,6 +12,8 @@ abstract contract CrowdsaleRefundable is Context, ReentrancyGuard, CrowdsaleBase
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
+    event CrowdsaleRefund(address purchaser, uint256);
+
     mapping(address => uint256) private _purchasers;
 
     function _canRefundable() internal view returns (bool) {
@@ -34,6 +36,7 @@ abstract contract CrowdsaleRefundable is Context, ReentrancyGuard, CrowdsaleBase
 
         _purchasers[purchaser] = 0;
         raiseToken.safeTransferFrom(raiseWallet, purchaser, amount);
+        emit CrowdsaleRefund(purchaser, amount);
     }
 
     function _updatePurchasingState(

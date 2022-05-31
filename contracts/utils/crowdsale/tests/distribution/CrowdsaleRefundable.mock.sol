@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "../../distribution/CrowdsaleRefundable.sol";
 
-abstract contract CrowdsaleRefundableMock is CrowdsaleRefundable {
+contract CrowdsaleRefundableMock is CrowdsaleRefundable {
     bool private __hasFinished = false;
     bool private __goalReached = false;
 
@@ -19,7 +19,7 @@ abstract contract CrowdsaleRefundableMock is CrowdsaleRefundable {
         return __goalReached;
     }
 
-    function withdrawFunds() external nonReentrant {
+    function withdrawFunds() external {
         _withdrawFunds();
     }
 
@@ -29,5 +29,21 @@ abstract contract CrowdsaleRefundableMock is CrowdsaleRefundable {
 
     function setGoalReached(bool goalReached) external {
         __goalReached = goalReached;
+    }
+
+    function setRaiseWallet(address raiseWallet) public {
+        _setRaiseWallet(raiseWallet);
+    }
+
+    function setSaleToken(address saleToken) external {
+        _setSaleToken(saleToken);
+    }
+
+    function setRaiseToken(address raiseToken) external {
+        _setRaiseToken(raiseToken);
+    }
+
+    function setRate(uint256 rate) external {
+        _setRate(rate);
     }
 }
