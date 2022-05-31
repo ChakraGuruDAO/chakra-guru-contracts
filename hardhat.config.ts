@@ -18,6 +18,7 @@ import "./tasks";
 
 import { buildHardhatNetworkAccount, getPKs } from "./utils/prepareAccounts";
 import { ENVIRONMENT } from "./utils/env.config";
+import { Time } from "./test/_base";
 
 const accounts = getPKs();
 
@@ -25,7 +26,7 @@ const config: HardhatUserConfig = {
   solidity: "0.8.4",
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: { accounts: buildHardhatNetworkAccount(accounts) },
+    hardhat: { accounts: buildHardhatNetworkAccount(accounts), initialDate: Time().toString() },
     ganache: {
       url: "http://127.0.0.1:7545/",
       chainId: 1337,

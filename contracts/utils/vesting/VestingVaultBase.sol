@@ -44,6 +44,9 @@ abstract contract VestingVaultBase is VestingVaultMeta, Context {
     }
 
     function _addBeneficiary(address beneficiary, uint256 amount) internal virtual onlyIsStatus(Status.BENEFICIARY) {
+        require(beneficiary != address(0), "empty address");
+        require(amount > 0, "empty amount");
+
         _beneficiaries.add(beneficiary);
 
         (uint256[] memory vestingPortionsUnlockTime, , ) = getVestingInfo();
@@ -54,6 +57,8 @@ abstract contract VestingVaultBase is VestingVaultMeta, Context {
     }
 
     function _removeBeneficiary(address beneficiary) internal virtual onlyIsStatus(Status.BENEFICIARY) {
+        require(_beneficiaries.contains(beneficiary), "beneficiary not found");
+
         _beneficiaries.remove(beneficiary);
         delete _beneficiaryInfoMap[beneficiary];
         emit VaultBeneficiaryUpdated(beneficiary, 0);
