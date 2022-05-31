@@ -16,7 +16,7 @@ import "@openzeppelin/hardhat-upgrades";
 
 import "./tasks";
 
-import { buildHardhatNetworkAccount, getPKs } from "./utils/configInit";
+import { buildHardhatNetworkAccount, getPKs } from "./utils/prepareAccounts";
 import { ENVIRONMENT } from "./utils/env.config";
 
 const accounts = getPKs();
