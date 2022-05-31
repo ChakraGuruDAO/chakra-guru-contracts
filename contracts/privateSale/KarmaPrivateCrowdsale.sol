@@ -18,11 +18,8 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
         address raiseToken,
         address raiseWallet
     ) {
-        // Meta
         _setSaleToken(saleToken);
         _setRaiseToken(raiseToken);
-
-        // Base
         _setRaiseWallet(raiseWallet);
     }
 
@@ -71,11 +68,11 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
         address beneficiary,
         uint256 saleAmount,
         uint256 raiseAmount
-    ) internal view override(CrowdsaleBase, CrowdsaleCapped, CrowdsaleLimitter, CrowdsaleTime) {
+    ) internal view override(CrowdsaleTime, CrowdsaleLimitter, CrowdsaleCapped, CrowdsaleBase) {
         super._preValidatePurchase(beneficiary, saleAmount, raiseAmount);
     }
 
-    function _processPurchase(address beneficiary, uint256 saleAmount) internal override(CrowdsaleBase, CrowdsalePostDelivery) {
+    function _processPurchase(address beneficiary, uint256 saleAmount) internal override(CrowdsalePostDelivery, CrowdsaleBase) {
         super._processPurchase(beneficiary, saleAmount);
     }
 

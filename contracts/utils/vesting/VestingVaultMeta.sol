@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
 abstract contract VestingVaultMeta {
+    using SafeMath for uint8;
     using SafeMath for uint256;
     using Address for address;
 
@@ -90,8 +91,9 @@ abstract contract VestingVaultMeta {
     }
 
     function _changeStatus(Status newStatus) internal virtual {
+        require(uint8(newStatus) <= uint8(Status.CLAIM), "wrong status stage");
         Status prevStatus = _status;
-        require(uint8(newStatus) > uint8(prevStatus), "wrong status stage");
+        require(uint8(newStatus) == uint8(prevStatus).add(1), "wrong status stage");
 
         _status = newStatus;
         if (_status == Status.BENEFICIARY) {

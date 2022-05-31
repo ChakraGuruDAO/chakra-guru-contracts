@@ -1,6 +1,6 @@
-import { utils, Wallet } from "ethers";
+import { Wallet } from "ethers";
 import { task, types } from "hardhat/config";
-import { generatePKs } from "~/utils/configInit";
+import { generatePKs } from "~/utils/prepareAccounts";
 
 task("generateWallet", "Generate new Wallet with pk")
   .addOptionalParam("count", "Count of addresses to generate", 1, types.int)
