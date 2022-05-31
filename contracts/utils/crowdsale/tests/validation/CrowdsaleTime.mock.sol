@@ -19,4 +19,20 @@ contract CrowdsaleTimeMock is CrowdsaleTime {
     function isFinishedByTime() external view returns (bool) {
         return _isFinishedByTime();
     }
+
+    function setRaiseWallet(address raiseWallet) public {
+        _setRaiseWallet(raiseWallet);
+    }
+
+    function setSaleToken(address saleToken) external {
+        _setSaleToken(saleToken);
+    }
+
+    function setRaiseToken(address raiseToken) external {
+        _setRaiseToken(raiseToken);
+    }
+
+    function setRate(uint256 rate) external {
+        _setRate(rate);
+    }
 }

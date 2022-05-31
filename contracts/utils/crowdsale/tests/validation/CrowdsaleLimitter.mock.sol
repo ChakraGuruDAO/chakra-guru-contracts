@@ -11,4 +11,20 @@ contract CrowdsaleLimitterMock is CrowdsaleLimitter {
     function setMaxSaleLimit(uint256 maxSaleLimit) external {
         _setMaxSaleLimit(maxSaleLimit);
     }
+
+    function setRaiseWallet(address raiseWallet) public {
+        _setRaiseWallet(raiseWallet);
+    }
+
+    function setSaleToken(address saleToken) external {
+        _setSaleToken(saleToken);
+    }
+
+    function setRaiseToken(address raiseToken) external {
+        _setRaiseToken(raiseToken);
+    }
+
+    function setRate(uint256 rate) external {
+        _setRate(rate);
+    }
 }

@@ -25,16 +25,17 @@ abstract contract CrowdsaleTime is CrowdsaleBase {
     }
 
     function _setClosingTime(uint256 closingTime) internal virtual {
+        require(_openingTime != 0, "opening time is not set");
         require(closingTime > block.timestamp && closingTime > _openingTime, "closing time is wrong");
         _closingTime = closingTime;
     }
 
     function _isOpenByTime() internal view virtual returns (bool) {
-        return block.timestamp >= _openingTime && block.timestamp <= _closingTime;
+        return block.timestamp >= _openingTime && block.timestamp < _closingTime;
     }
 
     function _isFinishedByTime() internal view virtual returns (bool) {
-        return block.timestamp > _closingTime;
+        return block.timestamp >= _closingTime;
     }
 
     function _preValidatePurchase(
