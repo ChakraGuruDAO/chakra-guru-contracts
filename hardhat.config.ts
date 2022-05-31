@@ -53,9 +53,7 @@ const config: HardhatUserConfig = {
       bscTestnet: ENVIRONMENT.ETHERSCAN.BSC,
     },
   },
-  typechain: {
-    outDir: "endpoints",
-  },
+  typechain: {},
   watcher: {
     compilation: {
       tasks: ["compile"],
