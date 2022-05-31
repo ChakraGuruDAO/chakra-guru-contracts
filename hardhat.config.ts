@@ -23,7 +23,12 @@ import { Time } from "./test/_base";
 const accounts = getPKs();
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: {
+    version: "0.8.4",
+    settings: {
+      optimizer: { enabled: true, runs: 1000 },
+    },
+  },
   defaultNetwork: "hardhat",
   networks: {
     hardhat: { accounts: buildHardhatNetworkAccount(accounts), initialDate: Time().toString() },
