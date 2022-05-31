@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -106,7 +106,7 @@ abstract contract VestingVaultMeta {
         require(address(_token) != address(0), "address is empty");
         require(_vestingPercentPrecision >= 1, "precision is not set");
         require(_vestingPortionsUnlockTime.length > 0 && _vestingPercentPerPortion.length > 0, "vesting info is not set");
-        require(_zeroDate > block.timestamp, "zero date is not set");
+        require(_zeroDate > 0, "zero date is not set");
     }
 
     function _changeStatusToClaim() internal virtual {

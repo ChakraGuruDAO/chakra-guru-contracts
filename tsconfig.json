@@ -9,8 +9,11 @@
     "declaration": true,
 
     "noImplicitAny": false,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "paths": {
+      "~/*": ["*"]
+    }
   },
-  "include": ["./scripts", "./test", "./typechain"],
+  "include": ["./test", "./typechain", "./tasks"],
   "files": ["./hardhat.config.ts"]
 }

@@ -6,12 +6,6 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
   for (const account of accounts) {
-    console.log(
-      account.address,
-      await account
-        .getBalance()
-        .then((balance) => balance.div(BigNumber.from(10).pow(18)).toString())
-        .then((balance) => `${balance} ETH`)
-    );
+    console.log(account.address, await account.getBalance().then((balance) => balance.div(BigNumber.from(10).pow(18)).toString()));
   }
 });
