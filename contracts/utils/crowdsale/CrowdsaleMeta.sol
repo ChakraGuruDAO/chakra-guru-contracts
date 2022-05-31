@@ -34,11 +34,11 @@ abstract contract CrowdsaleMeta {
     }
 
     function getSaleAmountFromRaiseAmount(uint256 raiseAmount) public view virtual returns (uint256) {
-        return _rate.div(raiseAmount);
+        return _rate.mul(raiseAmount);
     }
 
     function getRaiseAmountFromSaleAmount(uint256 saleAmount) public view virtual returns (uint256) {
-        return saleAmount.mul(getRate());
+        return saleAmount.div(getRate());
     }
 
     function _setSaleToken(address saleToken) internal virtual {
@@ -50,8 +50,8 @@ abstract contract CrowdsaleMeta {
     }
 
     function _setRaiseToken(address raiseToken) internal virtual {
-        require(raiseToken != address(0), "saleToken address is empty");
-        require(raiseToken.isContract(), "saleToken address is not contract");
+        require(raiseToken != address(0), "raiseToken address is empty");
+        require(raiseToken.isContract(), "raiseToken address is not contract");
 
         _raiseToken = IERC20(raiseToken);
         emit CrowdsaleRaiseTokenUpdated(raiseToken);
