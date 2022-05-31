@@ -13,15 +13,31 @@ contract VestingVaultAccessControl is VestingVaultBase, AccessControlEnumerable 
         _setupRole(CONFIG_ROLE, _msgSender());
     }
 
-    function addBeneficiary(address beneficiary, uint256 amount) external onlyRole(BENEFICIARY_MANAGE_ROLE) {
-        _addBeneficiary(beneficiary, amount);
+    function _setVestingInfo(
+        uint256[] memory vestingPortionsUnlockTime,
+        uint256[] memory vestingPercentPerPortion,
+        uint256 vestingPercentPrecision
+    ) internal virtual override onlyRole(CONFIG_ROLE) {
+        super._setVestingInfo(vestingPortionsUnlockTime, vestingPercentPerPortion, vestingPercentPrecision);
     }
 
-    function removeBeneficiary(address beneficiary) external onlyRole(BENEFICIARY_MANAGE_ROLE) {
-        _removeBeneficiary(beneficiary);
+    function _setZeroDate(uint256 zeroDate) internal virtual override onlyRole(CONFIG_ROLE) {
+        super._setZeroDate(zeroDate);
     }
 
-    function claim(uint256[] calldata portionIds) external {
-        _claimMultiPortions(portionIds);
+    function _setToken(address token) internal virtual override onlyRole(CONFIG_ROLE) {
+        super._setToken(token);
+    }
+
+    function _changeStatus(Status newStatus) internal virtual override onlyRole(CONFIG_ROLE) {
+        super._changeStatus(newStatus);
+    }
+
+    function _addBeneficiary(address beneficiary, uint256 amount) internal virtual override onlyRole(BENEFICIARY_MANAGE_ROLE) {
+        super._addBeneficiary(beneficiary, amount);
+    }
+
+    function _removeBeneficiary(address beneficiary) internal virtual override onlyRole(BENEFICIARY_MANAGE_ROLE) {
+        super._removeBeneficiary(beneficiary);
     }
 }

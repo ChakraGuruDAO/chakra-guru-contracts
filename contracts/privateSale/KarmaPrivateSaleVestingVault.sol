@@ -15,11 +15,23 @@ contract KarmaPrivateSaleVestingVault is VestingVaultAccessControl {
         _setVestingInfo(vestingPortionsUnlockTime, vestingPercentPerPortion, vestingPercentPrecision);
     }
 
-    function setZeroDate(uint256 zeroDate) external onlyRole(CONFIG_ROLE) {
+    function setZeroDate(uint256 zeroDate) external {
         _setZeroDate(zeroDate);
     }
 
-    function changeStatus(Status newStatus) external onlyRole(CONFIG_ROLE) {
+    function addBeneficiary(address beneficiary, uint256 amount) external {
+        _addBeneficiary(beneficiary, amount);
+    }
+
+    function removeBeneficiary(address beneficiary) external {
+        _removeBeneficiary(beneficiary);
+    }
+
+    function claim(uint256[] calldata portionIds) external {
+        _claimMultiPortions(portionIds);
+    }
+
+    function changeStatus(Status newStatus) external {
         _changeStatus(newStatus);
     }
 }

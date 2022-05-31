@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
-import "../../vesting/VestingVaultAccessControl.sol";
+import "../../vesting/IVestingVault.sol";
 import "../CrowdsaleBase.sol";
 
 abstract contract CrowdsalePostDelivery is CrowdsaleBase {
@@ -18,9 +18,9 @@ abstract contract CrowdsalePostDelivery is CrowdsaleBase {
 
     event CrowdsaleVestingVaultUpdated(address newVestingVault, address prevVestingVault);
 
-    VestingVaultAccessControl private _vestingVault;
+    IVestingVault private _vestingVault;
 
-    function getVestingVault() public view returns (VestingVaultAccessControl) {
+    function getVestingVault() public view returns (IVestingVault) {
         return _vestingVault;
     }
 
@@ -29,7 +29,7 @@ abstract contract CrowdsalePostDelivery is CrowdsaleBase {
         require(vestingVault.isContract(), "address is not contract");
 
         address prevVestingVault = address(_vestingVault);
-        _vestingVault = VestingVaultAccessControl(vestingVault);
+        _vestingVault = IVestingVault(vestingVault);
 
         emit CrowdsaleVestingVaultUpdated(vestingVault, prevVestingVault);
     }

@@ -4,9 +4,6 @@ pragma solidity ^0.8.0;
 import "../VestingVaultBase.sol";
 
 contract VestingVaultBaseMock is VestingVaultBase {
-    bool public changeStatusToBeneficiaryCalled = false;
-    bool public changeStatusToClaimCalled = false;
-
     function setInfo(
         address token,
         uint256 zeroDate,
@@ -33,15 +30,5 @@ contract VestingVaultBaseMock is VestingVaultBase {
 
     function claimMultiPortions(uint256[] calldata portionIds) external {
         _claimMultiPortions(portionIds);
-    }
-
-    function _changeStatusToBeneficiary() internal virtual override {
-        super._changeStatusToBeneficiary();
-        changeStatusToBeneficiaryCalled = true;
-    }
-
-    function _changeStatusToClaim() internal virtual override {
-        super._changeStatusToClaim();
-        changeStatusToClaimCalled = true;
     }
 }
