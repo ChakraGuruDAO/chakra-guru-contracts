@@ -16,7 +16,15 @@ contract VestingVaultAccessControlMock is VestingVaultAccessControl {
         _setVestingInfo(vestingPortionsUnlockTime, vestingPercentPerPortion, vestingPercentPrecision);
     }
 
-    function changeStatus(Status newStatus) external onlyRole(CONFIG_ROLE) {
+    function changeStatus(Status newStatus) external {
         _changeStatus(newStatus);
+    }
+
+    function addBeneficiary(address beneficiary, uint256 amount) external virtual {
+        _addBeneficiary(beneficiary, amount);
+    }
+
+    function removeBeneficiary(address beneficiary) external virtual {
+        _removeBeneficiary(beneficiary);
     }
 }

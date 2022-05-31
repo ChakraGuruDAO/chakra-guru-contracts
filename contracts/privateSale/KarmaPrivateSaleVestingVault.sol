@@ -3,9 +3,8 @@ pragma solidity ^0.8.0;
 
 import "../utils/vesting/VestingVaultAccessControl.sol";
 import "../utils/vesting/VestingVaultBase.sol";
-import "../utils/vesting/IVestingVault.sol";
 
-contract KarmaPrivateSaleVestingVault is VestingVaultAccessControl, IVestingVault {
+contract KarmaPrivateSaleVestingVault is VestingVaultAccessControl {
     constructor(
         address karmaToken,
         uint256[] memory vestingPortionsUnlockTime,
@@ -15,10 +14,6 @@ contract KarmaPrivateSaleVestingVault is VestingVaultAccessControl, IVestingVaul
         _setToken(karmaToken);
         _setZeroDate(block.timestamp);
         _setVestingInfo(vestingPortionsUnlockTime, vestingPercentPerPortion, vestingPercentPrecision);
-    }
-
-    function getBeneficiary(address beneficiary) public view override(VestingVaultBase, IVestingVault) returns (uint256 amount, bool[] memory isPortionWithdraw) {
-        return super.getBeneficiary(beneficiary);
     }
 
     function setZeroDate(uint256 zeroDate) external {
