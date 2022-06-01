@@ -46,6 +46,10 @@ contract KarmaPrivateCrowdsale is Ownable, CrowdsaleBase, CrowdsaleTime, Crowdsa
         _setVestingVault(vestingVault);
     }
 
+    function withdrawFundsWhenCapNotReached() public {
+        _withdrawFunds();
+    }
+
     function isOpen() public view returns (bool) {
         (, bool maxSaleCapReached) = capReached();
         return _isOpenByTime() && !maxSaleCapReached;

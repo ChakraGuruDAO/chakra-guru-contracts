@@ -1,11 +1,16 @@
 import { BigNumber, BigNumberish } from "ethers";
 import { task, types } from "hardhat/config";
+import { Duration } from "~/test/_base";
 
-export const vestingPortionsUnlockTime: BigNumberish[] = [
-  0, 2592000, 5184000, 7776000, 10368000, 12960000, 15552000, 18144000, 20736000, 23328000, 25920000, 28512000, 31104000, 33696000, 36288000, 38880000,
-].map((m) => BigNumber.from(m));
-export const vestingPercentPerPortion: BigNumberish[] = [10000, 0, 0, 0, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500].map((m) => BigNumber.from(m));
-export const vestingPercentPrecision: BigNumberish = BigNumber.from(100000);
+// export const vestingPortionsUnlockTime: BigNumberish[] = [
+//   0, 2592000, 5184000, 7776000, 10368000, 12960000, 15552000, 18144000, 20736000, 23328000, 25920000, 28512000, 31104000, 33696000, 36288000, 38880000,
+// ].map((m) => BigNumber.from(m));
+// export const vestingPercentPerPortion: BigNumberish[] = [10000, 0, 0, 0, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500, 7500].map((m) => BigNumber.from(m));
+// export const vestingPercentPrecision: BigNumberish = BigNumber.from(100000);
+
+export const vestingPortionsUnlockTime: BigNumberish[] = [0, Duration().minutes(5).toNumber(), Duration().minutes(10).toNumber()].map((m) => BigNumber.from(m));
+export const vestingPercentPerPortion: BigNumberish[] = [30, 35, 35].map((m) => BigNumber.from(m));
+export const vestingPercentPrecision: BigNumberish = BigNumber.from(100);
 
 task("deploy:karma_private_sale_vesting_vault", "Deploy KARMA Private sale Vesting vault")
   .addParam("karmatoken", "KARMA Token address", null, types.string)
